@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarke Solutions - Wardrobe Architecture Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        /* CORE VARIABLES */
+        :root {
+            --clarke-navy: #0C2340;
+            --clarke-cream: #F5F5F0;
+            --clarke-red: #8A1538;
+            --clarke-grey: #374151;
+            --earth-brown: #4A3B32;
+            --clarke-super-cream: #faf2e4;
+        }
+
+        /* RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--clarke-cream);
+            color: var(--clarke-navy);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TYPOGRAPHY */
+        h1,
+        h2,
+        h3,
+        .font-director {
+            font-family: 'Bodoni Moda', serif;
+        }
+
+        /* LAYOUT */
+        .dashboard-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex-grow: 1;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--clarke-navy);
+        }
+
+        .brand-lockup h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-lockup .full-stop {
+            color: var(--clarke-red);
+        }
+
+        .brand-lockup p {
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: var(--clarke-grey);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .meta-data {
+            text-align: right;
+        }
+
+        .meta-data p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .meta-data span {
+            color: var(--clarke-grey);
+            font-weight: 400;
+        }
+
+        /* MAIN GRID */
+        main {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        /* CARDS */
+        .card {
+            background: #FFFFFF;
+            border: none;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            /* Tighter, darker drop-shadow acting as a structural border */
+            box-shadow: 0 4px 12px rgba(12, 35, 64, 0.25);
+        }
+
+        .card-protocol {
+            grid-column: span 4;
+        }
+
+        .card-bridge {
+            grid-column: span 8;
+        }
+
+        .card-lane-pro {
+            grid-column: span 6;
+            background: var(--clarke-navy);
+            color: #FFFFFF;
+        }
+
+        .card-lane-personal {
+            grid-column: span 6;
+            border-top: 8px solid var(--clarke-super-cream);
+            background-color: var(--clarke-super-cream);
+        }
+
+        .card-alert {
+            grid-column: span 12;
+            border-left: 8px solid var(--clarke-red);
+            background: #FFF9FA;
+        }
+
+        .card-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--clarke-grey);
+            letter-spacing: 0.05em;
+        }
+
+        .card-lane-pro .card-header {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-lane-personal .card-header {
+            color: var(--clarke-navy);
+            border-bottom-color: var(--earth-brown);
+        }
+
+        .card-alert .card-header {
+            color: var(--clarke-red);
+            border-bottom-color: var(--clarke-red);
+        }
+
+        /* SWATCHES */
+        .swatch-matrix {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .swatch {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            padding: 0 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            /* Heavy border to prevent light colors from vanishing on white cards */
+            border: 2px solid rgba(12, 35, 64, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* LISTS & DATA */
+        .spec-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid var(--clarke-navy);
+            padding-left: 1rem;
+        }
+
+        .card-lane-pro .spec-item {
+            border-left-color: #FFFFFF;
+        }
+
+        .card-lane-personal .spec-item {
+            border-left-color: var(--earth-brown);
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--clarke-grey);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-lane-pro .spec-label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .card-lane-personal .spec-label {
+            color: var(--clarke-navy);
+        }
+
+        .spec-desc {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--clarke-navy);
+            color: #FFFFFF;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            border-top: 4px solid var(--clarke-grey);
+            margin-top: auto;
+        }
+
+        .footer-block h4 {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--clarke-cream);
+        }
+
+        .footer-block p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 1200px) {
+            .card-protocol {
+                grid-column: span 12;
+            }
+
+            .card-bridge {
+                grid-column: span 12;
+            }
+
+            footer {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .card-lane-pro {
+                grid-column: span 12;
+            }
+
+            .card-lane-personal {
+                grid-column: span 12;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+        <header>
+            <div class="brand-lockup">
+                <h1 class="font-director">Clarke<span class="full-stop">.</span></h1>
+            </div>
+            <div class="meta-data font-brand">
+                <p>Directive: <span>WA-2026-06</span></p>
+                <p>System Status: <span>Active Dashboard</span></p>
+                <p>Archetype: <span>Signature of Authority</span></p>
+            </div>
+        </header>
+
+        <main>
+
+            <div class="card card-protocol">
+                <h2 class="card-header font-director">1. The Full Stop.</h2>
+                <div class="swatch-matrix">
+                    <div class="swatch" style="background-color: #8A1538; color: #FFFFFF; border-color: #8A1538;">
+                        #8A1538 (Signal Red)</div>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">
+                    <strong>Prohibited as a primary garment.</strong> Represents precision. Overuse degrades the signal.
+                </p>
+                <div class="spec-item">
+                    <span class="spec-label" style="color: #8A1538;">Approved Deployments</span>
+                    <span class="spec-desc">Watch strap stitching, discreet pocket square edge, internal linings.</span>
+                </div>
+            </div>
+
+            <div class="card card-bridge">
+                <h2 class="card-header font-director">2. Universal Bridge Layers</h2>
+                <div class="swatch-matrix">
+                    <div class="swatch" style="background-color: #FFFFFF; color: #0C2340; border-color: #374151;">Optic
+                        White</div>
+                    <div class="swatch" style="background-color: #F5F5F0; color: #0C2340; border-color: #374151;">Paper
+                        / Cream</div>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--clarke-grey); line-height: 1.5;">
+                    The only assets permitted to cross lanes. High wear-velocity. Demands clinical maintenance.
+                </p>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label">Base Layers (T-Shirts)</span>
+                        <span class="spec-desc">Heavyweight (180gsm+). Rigid 2cm ribbed collars. Zero branding.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Hybrid Layers (Shirting)</span>
+                        <span class="spec-desc">Heavy Oxford Cloth Button-Downs (OCBD). Crisp collars.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Achromatic Hardware (Accessories)</span>
+                        <span class="spec-desc">Transparent acrylic and polished metal (eyewear, pens, timepieces). Zero
+                            colored leather to prevent lane contamination.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-lane-pro">
+                <h2 class="card-header font-director">3. Professional Lane</h2>
+                <div class="swatch-matrix">
+                    <div class="swatch" style="background-color: #0C2340; color: #FFFFFF; border-color: #0C2340;">
+                        Strategic Navy</div>
+                    <div class="swatch" style="background-color: #374151; color: #FFFFFF; border-color: #374151;">Slate
+                        Grey</div>
+                    <div class="swatch"
+                        style="background-color: #000000; color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+                        Highlight Black</div>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: rgba(255,255,255,0.8); line-height: 1.5;">
+                    Client-facing authority. Engineered precision. Black is deployed sparingly as the structural leather
+                    anchor.
+                </p>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label">Structural Core (Trousers)</span>
+                        <span class="spec-desc">Navy worsted wool or heavy drill. Pleated front.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Thermal Mid-Layers</span>
+                        <span class="spec-desc">Slate Grey fine-gauge knitwear.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Leather Anchor (Black Only)</span>
+                        <span class="spec-desc">Legacy Black Biker Jacket. Black leather dress shoes. Black belt.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-lane-personal">
+                <h2 class="card-header font-director">4. Personal Lane</h2>
+                <div class="swatch-matrix">
+                    <div class="swatch" style="background-color: #4A3B32; color: #FFFFFF; border-color: #4A3B32;">Earth
+                        Brown</div>
+                    <div class="swatch" style="background-color: #0C2340; color: #FFFFFF; border-color: #0C2340;">Raw
+                        Indigo</div>
+                    <div class="swatch" style="background-color: #C3B091; color: #0C2340; border-color: #C3B091;">Khaki
+                        / Sand</div>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--clarke-navy); line-height: 1.5;">
+                    Off-duty continuity. Cross-pollinates the Cream baseline and Indigo Utility. Signals approachable
+                    reliability.
+                </p>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label">Structural Core (Legwear)</span>
+                        <span class="spec-desc">Raw Indigo heavy denim, Khaki, or Sand chinos.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Thermal Mid-Layers</span>
+                        <span class="spec-desc">Cream/Paper textured heavy-gauge knitwear.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Leather Anchor (Brown Only)</span>
+                        <span class="spec-desc">Legacy Brown Cafe-Racer Jacket. Brown casual footwear.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-alert">
+                <h2 class="card-header font-director">[ ! ] Existential Risks</h2>
+                <ul class="spec-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <li class="spec-item" style="border-left-color: #8A1538;">
+                        <span class="spec-label" style="color: #8A1538;">The Navy/Black Collision</span>
+                        <span class="spec-desc">Navy trousers adjacent to the Black Biker Jacket creates visual mud. A
+                            Slate Grey or Optic White bridge layer <strong>must</strong> separate them.</span>
+                    </li>
+                    <li class="spec-item" style="border-left-color: #8A1538;">
+                        <span class="spec-label" style="color: #8A1538;">Textural Contamination</span>
+                        <span class="spec-desc">Navy in the Professional lane must be flat (worsted wool). Navy in the
+                            Personal lane must be textured (raw indigo denim). Mixing textures across lanes destroys the
+                            archetype.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card" style="grid-column: span 6; border-top: 8px solid var(--clarke-grey);">
+                <h2 class="card-header font-director"
+                    style="color: var(--clarke-grey); border-bottom-color: var(--clarke-grey);">5. The Active Layer)
+                </h2>
+                <div class="swatch-matrix">
+                    <div class="swatch" style="background-color: #374151; color: #FFFFFF; border-color: #374151;">Tech
+                        Grey</div>
+                    <div class="swatch" style="background-color: #000000; color: #FFFFFF; border-color: #000000;">Tech
+                        Black</div>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--clarke-grey); line-height: 1.5;">
+                    Quarantined utility and athletic wear. Mirrors the brand's "Live Layer" (Franklin Gothic) for
+                    high-friction physical execution.
+                </p>
+                <ul class="spec-list">
+                    <li class="spec-item" style="border-left-color: var(--clarke-grey);">
+                        <span class="spec-label" style="color: var(--clarke-navy);">Structural Core</span>
+                        <span class="spec-desc">Strictly Grey and Black technical synthetics (elastane, nylon,
+                            performance knits).</span>
+                    </li>
+                    <li class="spec-item" style="border-left-color: var(--clarke-grey);">
+                        <span class="spec-label" style="color: var(--clarke-navy);">The Quarantine Rule</span>
+                        <span class="spec-desc">Absolute zero cross-pollination. Technical fabrics and athletic fits
+                            must never enter the Professional or Personal lanes.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card" style="grid-column: span 6; border-top: 8px solid var(--clarke-navy);">
+                <h2 class="card-header font-director"
+                    style="color: var(--clarke-navy); border-bottom-color: var(--clarke-navy);">6. Lifecycle Procurement
+                </h2>
+                <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--clarke-grey); line-height: 1.5;">
+                    Automated asset replenishment. Eliminates the shadow wardrobe of degraded items and standardizes
+                    quality control.
+                </p>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label" style="color: var(--clarke-navy);">Trigger: Donate & Renew</span>
+                        <span class="spec-desc">Upon failing the biannual visual audit, the asset is immediately donated
+                            to charity. This physical exit acts as the hard trigger to initiate renewal.</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label" style="color: var(--clarke-navy);">Digital Supply Chain</span>
+                        <span class="spec-desc">Procurement is restricted to pre-vetted online suppliers maintaining
+                            permanent, non-seasonal inventory for critical Bridge Assets.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </main>
+
+        <footer>
+            <div class="footer-block">
+                <h4 class="font-director">Climate Maintenance</h4>
+                <p>Highveld dust degrades leather rapidly. Rigid weekly wipe-down and conditioning required.</p>
+            </div>
+            <div class="footer-block">
+                <h4 class="font-director">Supplier Attrition</h4>
+                <p>True 200gsm+ t-shirts with tight collars are rare. Procure in bulk directly from blank-apparel
+                    suppliers.</p>
+            </div>
+            <div class="footer-block">
+                <h4 class="font-director">Laundry Segregation</h4>
+                <p>High volume of optic white bridge assets requires dedicated, isolated washing to prevent dark textile
+                    bleed.</p>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
