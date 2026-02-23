@@ -18,7 +18,7 @@
             --clarke-red: #8A1538;
             --clarke-grey: #374151;
             --earth-brown: #4A3B32;
-            --clarke-super-cream: #faf2e4;
+            --clarke-super-cream: #F4E4C8;
         }
 
         /* RESET & BASE */
@@ -67,10 +67,12 @@
             align-items: flex-end;
             padding-bottom: 1.5rem;
             border-bottom: 2px solid var(--clarke-navy);
+            flex-wrap: wrap; /* Added for mobile header scaling */
+            gap: 1rem;
         }
 
         .brand-lockup h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem); /* Fluid typography */
             font-weight: 700;
             line-height: 1;
             letter-spacing: -0.02em;
@@ -119,7 +121,6 @@
             display: flex;
             flex-direction: column;
             border-radius: 8px;
-            /* Tighter, darker drop-shadow acting as a structural border */
             box-shadow: 0 4px 12px rgba(12, 35, 64, 0.25);
         }
 
@@ -139,7 +140,7 @@
 
         .card-lane-personal {
             grid-column: span 6;
-            border-top: 8px solid var(--clarke-super-cream);
+            border-top: 8px solid var(--earth-brown);
             background-color: var(--clarke-super-cream);
         }
 
@@ -147,6 +148,16 @@
             grid-column: span 12;
             border-left: 8px solid var(--clarke-red);
             background: #FFF9FA;
+        }
+
+        .card-utility {
+            grid-column: span 6;
+            border-top: 8px solid var(--clarke-grey);
+        }
+
+        .card-lifecycle {
+            grid-column: span 6;
+            border-top: 8px solid var(--clarke-navy);
         }
 
         .card-header {
@@ -172,7 +183,7 @@
             border-bottom-color: var(--clarke-red);
         }
 
-        /* SWATCHES */
+        /* MATRICES & GRIDS */
         .swatch-matrix {
             display: flex;
             flex-wrap: wrap;
@@ -189,9 +200,14 @@
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.1em;
-            /* Heavy border to prevent light colors from vanishing on white cards */
             border: 2px solid rgba(12, 35, 64, 0.2);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
 
         /* LISTS & DATA */
@@ -266,27 +282,32 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* BREAKPOINTS */
         @media (max-width: 1200px) {
-            .card-protocol {
+            .card-protocol, .card-bridge {
                 grid-column: span 12;
             }
-
-            .card-bridge {
-                grid-column: span 12;
-            }
-
             footer {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 900px) {
-            .card-lane-pro {
+            .card-lane-pro, .card-lane-personal, .card-utility, .card-lifecycle {
                 grid-column: span 12;
             }
-
-            .card-lane-personal {
-                grid-column: span 12;
+            .risk-matrix {
+                grid-template-columns: 1fr;
+            }
+            .meta-data {
+                text-align: left;
+                width: 100%;
+            }
+            .dashboard-wrapper {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -298,6 +319,7 @@
         <header>
             <div class="brand-lockup">
                 <h1 class="font-director">Clarke<span class="full-stop">.</span></h1>
+                <p>Solutions (Pty) Ltd</p>
             </div>
             <div class="meta-data font-brand">
                 <p>Directive: <span>WA-2026-06</span></p>
@@ -309,7 +331,7 @@
         <main>
 
             <div class="card card-protocol">
-                <h2 class="card-header font-director">1. The Full Stop.</h2>
+                <h2 class="card-header font-director">1. The "Full Stop"</h2>
                 <div class="swatch-matrix">
                     <div class="swatch" style="background-color: #8A1538; color: #FFFFFF; border-color: #8A1538;">
                         #8A1538 (Signal Red)</div>
@@ -414,7 +436,7 @@
 
             <div class="card card-alert">
                 <h2 class="card-header font-director">[ ! ] Existential Risks</h2>
-                <ul class="spec-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <ul class="spec-list risk-matrix">
                     <li class="spec-item" style="border-left-color: #8A1538;">
                         <span class="spec-label" style="color: #8A1538;">The Navy/Black Collision</span>
                         <span class="spec-desc">Navy trousers adjacent to the Black Biker Jacket creates visual mud. A
@@ -429,10 +451,10 @@
                 </ul>
             </div>
 
-            <div class="card" style="grid-column: span 6; border-top: 8px solid var(--clarke-grey);">
+            <div class="card card-utility">
                 <h2 class="card-header font-director"
-                    style="color: var(--clarke-grey); border-bottom-color: var(--clarke-grey);">5. The Active Layer)
-                </h2>
+                    style="color: var(--clarke-grey); border-bottom-color: var(--clarke-grey);">5. The "Live" Layer
+                    (Utility)</h2>
                 <div class="swatch-matrix">
                     <div class="swatch" style="background-color: #374151; color: #FFFFFF; border-color: #374151;">Tech
                         Grey</div>
@@ -457,7 +479,7 @@
                 </ul>
             </div>
 
-            <div class="card" style="grid-column: span 6; border-top: 8px solid var(--clarke-navy);">
+            <div class="card card-lifecycle">
                 <h2 class="card-header font-director"
                     style="color: var(--clarke-navy); border-bottom-color: var(--clarke-navy);">6. Lifecycle Procurement
                 </h2>
@@ -483,16 +505,16 @@
 
         <footer>
             <div class="footer-block">
-                <h4 class="font-director">Climate Maintenance</h4>
+                <h4 class="font-director">Ops Risk: Climate Maintenance</h4>
                 <p>Highveld dust degrades leather rapidly. Rigid weekly wipe-down and conditioning required.</p>
             </div>
             <div class="footer-block">
-                <h4 class="font-director">Supplier Attrition</h4>
+                <h4 class="font-director">Ops Risk: Supplier Attrition</h4>
                 <p>True 200gsm+ t-shirts with tight collars are rare. Procure in bulk directly from blank-apparel
                     suppliers.</p>
             </div>
             <div class="footer-block">
-                <h4 class="font-director">Laundry Segregation</h4>
+                <h4 class="font-director">Ops Risk: Laundry Segregation</h4>
                 <p>High volume of optic white bridge assets requires dedicated, isolated washing to prevent dark textile
                     bleed.</p>
             </div>
